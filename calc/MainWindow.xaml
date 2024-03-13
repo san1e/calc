@@ -1,0 +1,382 @@
+﻿<Window
+    x:Class="calc.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:f="clr-namespace:FluentWpfChromes;assembly=FluentWpfChromes"
+    xmlns:local="clr-namespace:calc"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MainWindow"
+    Width="300"
+    Height="450"
+    AllowsTransparency="True"
+    FontFamily="Montserrat"
+    FontSize="17"
+    FontWeight="Bold"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <!--  Acrylic bg  -->
+    <Window.Background>
+        <SolidColorBrush Opacity="0.1" Color="Khaki" />
+    </Window.Background>
+    <f:AcrylicChrome.AcrylicChrome>
+        <f:AcrylicChrome />
+    </f:AcrylicChrome.AcrylicChrome>
+    <!--  Styles for button and animation  -->
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="ButtonBackgroundColor" Color="Transparent" />
+        <SolidColorBrush x:Key="ResBackgroundColor" Color="Orange" />
+        <SolidColorBrush x:Key="ButtonForegroundColor" Color="White" />
+        <Style x:Key="RoundButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource ButtonBackgroundColor}" />
+            <Setter Property="Foreground" Value="{StaticResource ButtonForegroundColor}" />
+            <Setter Property="Margin" Value="2.5" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Padding="10"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Gray" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="White" />
+                    <Setter Property="Opacity" Value="0.5" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ResAnim" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource ResBackgroundColor}" />
+            <Setter Property="Foreground" Value="{StaticResource ButtonForegroundColor}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Padding="10"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FAB446" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#FAB446" />
+                    <Setter Property="Opacity" Value="0.5" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid x:Name="Main">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <!--  output  -->
+        <TextBlock
+            x:Name="Output"
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="5"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Background="Transparent"
+            Foreground="White"
+            Margin="5"
+            FontSize="36"
+            Opacity="0.7"/>
+        <Grid
+            x:Name="AdditionalPanel"
+            Grid.Row="1"
+            Grid.RowSpan="5"
+            Grid.Column="5"
+            Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <!-- pi -->
+            <Button
+                x:Name="Pi"
+                Grid.Row="0"
+                Style="{StaticResource RoundButtonStyle}"
+                Click="ButtonPi_Click">
+                <Image
+                    Width="14"
+                    Height="16"
+                    Source="img/pi.png" />
+            </Button>
+            <!--exp-->
+            <Button
+                x:Name="Exp"
+                Grid.Row="1"
+                Content="e"
+                Style="{StaticResource RoundButtonStyle}" />
+            <!--sqrt-->
+            <Button
+                x:Name="Sqrt"
+                Grid.Row="2"
+                Style="{StaticResource RoundButtonStyle}">
+                <Image
+                    Width="20"
+                    Height="18"
+                    Source="img/sqrt.png" />
+            </Button>
+            <!--pow-->
+            <Button
+                x:Name="Pow"
+                Grid.Row="3"
+                Style="{StaticResource RoundButtonStyle}"
+                Click="ButtonPow_Click">
+                
+                <Image
+                    Width="16"
+                    Height="14"
+                    Source="img/pow.png" />
+            </Button>
+            <!--Ln-->
+            <Button
+                x:Name="Ln"
+                Grid.Row="5"
+                Content="Ln"
+                Click="ButtonLn_Click"
+                Style="{StaticResource RoundButtonStyle}" />
+        </Grid>
+
+        <Button
+            x:Name="Menu"
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Width="50"
+            Height="50"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Background="Transparent"
+            BorderBrush="Transparent"
+            Style="{StaticResource RoundButtonStyle}">
+
+            <!--  Размещаем изображение внутри кнопки  -->
+            <Grid>
+                <!--  Размещаем изображение за кнопкой  -->
+                <Image
+                    x:Name="MenuIm"
+                    Width="23"
+                    Height="23"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    MouseDown="MenuIm_MouseDown"
+                    Source="img/menu-burger.png" />
+            </Grid>
+        </Button>
+        <!--  CE  -->
+        <Button
+            x:Name="BtnCE"
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="2.5"
+            Click="BtnCE_Click"
+            Content="CE"
+            Style="{StaticResource RoundButtonStyle}" />
+
+        <!--  C  -->
+        <Button
+            x:Name="BtnC"
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="2.5"
+            Content="C"
+            Style="{StaticResource RoundButtonStyle}" Click="BtnC_Click" />
+        <!--  DEL  -->
+        <Button
+            x:Name="BtnDel"
+            Grid.Row="1"
+            Grid.Column="2"
+            Margin="2.5"
+            Style="{StaticResource RoundButtonStyle}" Click="BtnDel_Click">
+            <Image
+                Width="30"
+                Height="30"
+                Source="img/3602247.png"
+                Stretch="Fill" />
+        </Button>
+        <!--  /  -->
+        <Button
+            x:Name="BtnDiv"
+            Grid.Row="1"
+            Grid.Column="3"
+            Margin="2.5"
+            Content="÷"
+            Click="Button_Click"
+            Style="{StaticResource RoundButtonStyle}" />
+        <!--  7  -->
+        <Button
+            x:Name="Btn7"
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="2.5"
+            Content="7"
+            Style="{StaticResource RoundButtonStyle}"
+            Click="Button_Click"/>
+        <!--  8  -->
+        <Button
+            x:Name="Btn8"
+            Grid.Row="2"
+            Grid.Column="1"
+            Margin="2.5"
+            Click="Button_Click"
+            Content="8"
+            Style="{StaticResource RoundButtonStyle}" />
+        <!--  9  -->
+        <Button
+            x:Name="Btn9"
+            Grid.Row="2"
+            Grid.Column="2"
+            Margin="2.5"
+            Content="9"
+            Style="{StaticResource RoundButtonStyle}"
+            Click="Button_Click"/>
+        <!--  X  -->
+        <Button
+            x:Name="BtnMul"
+            Grid.Row="2"
+            Grid.Column="3"
+            Margin="2.5"
+            Content="x"
+            Click="Button_Click"
+            Style="{StaticResource RoundButtonStyle}"/>
+        <!--  4  -->
+        <Button
+            x:Name="Btn4"
+            Grid.Row="3"
+            Grid.Column="0"
+            Margin="2.5"
+            Content="4"
+            Style="{StaticResource RoundButtonStyle}" 
+            Click="Button_Click"/>
+        <!--  5  -->
+        <Button
+            x:Name="Btn5"
+            Grid.Row="3"
+            Grid.Column="1"
+            Margin="2.5"
+            Content="5"
+            Style="{StaticResource RoundButtonStyle}" 
+            Click="Button_Click"/>
+        <!--  6  -->
+        <Button
+            x:Name="Btn6"
+            Grid.Row="3"
+            Grid.Column="2"
+            Margin="2.5"
+            Content="6"
+            Style="{StaticResource RoundButtonStyle}" 
+            Click="Button_Click"/>
+        <!--  -  -->
+        <Button
+            x:Name="BtnMin"
+            Grid.Row="3"
+            Grid.Column="3"
+            Margin="2.5"
+            Content="-"
+            Click="Button_Click"
+            Style="{StaticResource RoundButtonStyle}" />
+        <!--  1  -->
+        <Button
+            x:Name="Btn1"
+            Grid.Row="4"
+            Grid.Column="0"
+            Margin="2.5"
+            Content="1"
+            Style="{StaticResource RoundButtonStyle}" 
+            Click="Button_Click"/>
+        <!--  2  -->
+        <Button
+            x:Name="Btn2"
+            Grid.Row="4"
+            Grid.Column="1"
+            Margin="2.5"
+            Content="2"
+            Style="{StaticResource RoundButtonStyle}"
+            Click="Button_Click"/>
+        <!--  3  -->
+        <Button
+            x:Name="Btn3"
+            Grid.Row="4"
+            Grid.Column="2"
+            Margin="2.5"
+            Content="3"
+            Style="{StaticResource RoundButtonStyle}"
+            Click="Button_Click"/>
+        <!--  +  -->
+        <Button
+            x:Name="BtnPlus"
+            Grid.Row="4"
+            Grid.Column="3"
+            Margin="2.5"
+            Content="+"
+            Click="Button_Click"
+            Style="{StaticResource RoundButtonStyle}" />
+        <!--  0  -->
+        <Button
+            x:Name="Btn0"
+            Grid.Row="5"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="2.5"
+            Content="0"
+            Style="{StaticResource RoundButtonStyle}"
+            Click="Button_Click"/>
+        <!--  ,  -->
+        <Button
+            x:Name="BtnComa"
+            Grid.Row="5"
+            Grid.Column="2"
+            Margin="2.5"
+            Content=","
+            Click="Button_Click"
+            Style="{StaticResource RoundButtonStyle}" />
+        <!--  =  -->
+        <Button
+            x:Name="BtnRes"
+            Grid.Row="5"
+            Grid.Column="3"
+            Margin="2.5"
+            Content="="
+            Click="BtnRes_Click"
+            Style="{StaticResource ResAnim}" />
+    </Grid>
+</Window>
