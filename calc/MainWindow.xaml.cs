@@ -67,11 +67,28 @@ namespace calc
                     Output.Text = $"{Output.Text.Substring(0, Output.Text.Length - 1)}{content}";
                 }
             }
+            else if (content == ",")
+            {
+                // Check if the previous character is a digit or another operator
+                if (Output.Text.Length == 0 || char.IsDigit(Output.Text[Output.Text.Length - 1]) || "*/+-".Contains(Output.Text[Output.Text.Length - 1]))
+                {
+                    // If so, append the comma
+                    Output.Text = $"{Output.Text},";
+                }
+            }
             else
             {
                 Output.Text = $"{Output.Text}{content}";
             }
+
+            // Reset awaitingPowerInput after adding power symbol
+            awaitingPowerInput = false;
+
+            // Reset isEqualPressed flag after adding a number or operator
+            isEqualPressed = false;
         }
+
+
         private void BtnCE_Click(object sender, RoutedEventArgs e)
         {
             if (Output.Text.Length > 0)
@@ -165,6 +182,16 @@ namespace calc
             }
         }
 
+        private void ButtonE_Click(object sender, RoutedEventArgs e)
+        {
+            if (Output.Text.Length > 0 && char.IsDigit(Output.Text[Output.Text.Length - 1]) && Output.Text != "0")
+            {
+                Output.Text += "+";
+            }
+
+            SendToInput("2,718");
+        }
+
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             try
@@ -178,14 +205,19 @@ namespace calc
                 Output.Text = "Error";
             }
         }
-        private void ButtonPow_Click(object sender, RoutedEventArgs e) 
+        private void ButtonPow_Click(object sender, RoutedEventArgs e)
         {
-            SendToInput("^");
-            awaitingPowerInput = true;
+                SendToInput("^");
         }
+
 
         private void ButtonPi_Click(object sender, RoutedEventArgs e)
         {
+            if (Output.Text.Length > 0 && char.IsDigit(Output.Text[Output.Text.Length - 1]) && Output.Text != "0")
+            {
+                Output.Text += "+";
+            }
+
             SendToInput("3,14");
         }
 

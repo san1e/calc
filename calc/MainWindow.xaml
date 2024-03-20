@@ -144,12 +144,14 @@
                 x:Name="Exp"
                 Grid.Row="1"
                 Content="e"
+                Click="ButtonE_Click"
                 Style="{StaticResource RoundButtonStyle}" />
             <!--sqrt-->
             <Button
                 x:Name="Sqrt"
                 Grid.Row="2"
-                Style="{StaticResource RoundButtonStyle}">
+                Style="{StaticResource RoundButtonStyle}"
+                Click="Button_Click_1">
                 <Image
                     Width="20"
                     Height="18"
