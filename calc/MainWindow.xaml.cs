@@ -13,6 +13,8 @@ namespace calc
     {
         private bool awaitingPowerInput = false;
         private bool isEqualPressed = false;
+        private double lastResult = 0;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -22,12 +24,24 @@ namespace calc
         {
             if (isEqualPressed)
             {
-                Output.Text = ""; // Очищаем поле вывода, если нажато равно в предыдущем вычислении
-                isEqualPressed = false; // Сбрасываем флаг
+                Output.Text = "0"; // Если равно было нажато, сбросить результат при нажатии цифровой кнопки
+                isEqualPressed = false; // Сброс флага равно
             }
+
             SendToInput(((Button)sender).Content.ToString());
         }
 
+        private void ButtonOper_Click(object sender, RoutedEventArgs e)
+        {
+            if (isEqualPressed)
+            {
+                isEqualPressed = false; // Сброс флага равно
+                awaitingPowerInput = false; // Сброс флага ожидания ввода степени
+                lastResult = double.Parse(Output.Text); // Сохранение текущего результата перед продолжением операции
+            }
+
+            SendToInput(((Button)sender).Content.ToString());
+        }
         private void SendToInput(string content)
         {
             if (Output.Text == "0")
@@ -40,8 +54,23 @@ namespace calc
             {
                 Output.Text = $"{Output.Text}0";
             }
-
-            Output.Text = $"{Output.Text}{content}";
+            else if ("*/+-".Contains(content))
+            {
+                if (Output.Text.Length > 0 && char.IsDigit(Output.Text[Output.Text.Length - 1]))
+                {
+                    // If the last character is a digit, append the operator
+                    Output.Text = $"{Output.Text}{content}";
+                }
+                else if (Output.Text.Length > 1 && "*/+-".Contains(Output.Text[Output.Text.Length - 1]))
+                {
+                    // If the last character is an operator, remove it and append the new one
+                    Output.Text = $"{Output.Text.Substring(0, Output.Text.Length - 1)}{content}";
+                }
+            }
+            else
+            {
+                Output.Text = $"{Output.Text}{content}";
+            }
         }
         private void BtnCE_Click(object sender, RoutedEventArgs e)
         {
@@ -94,6 +123,13 @@ namespace calc
             {
                 isEqualPressed = true; // Устанавливаем флаг при нажатии равно
                 string expression = Output.Text.Replace(',', '.').Replace('x', '*').Replace('÷', '/');
+
+                // Check if the last character is an operator and append zero if needed
+                if ("*/+-".Contains(expression[expression.Length - 1]))
+                {
+                    expression += "0";
+                }
+
                 if (expression.Contains("^"))
                 {
                     string[] parts = expression.Split('^');
@@ -104,8 +140,8 @@ namespace calc
                         if (double.TryParse(parts[0], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out baseNum) &&
                             double.TryParse(parts[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out exponent))
                         {
-                            double result = Math.Pow(baseNum, exponent);
-                            Output.Text = result.ToString();
+                            lastResult = Math.Pow(baseNum, exponent);
+                            Output.Text = lastResult.ToString();
                         }
                         else
                         {
@@ -119,8 +155,8 @@ namespace calc
                 }
                 else
                 {
-                    string result = new DataTable().Compute(expression, null).ToString();
-                    Output.Text = result;
+                    lastResult = double.Parse(new DataTable().Compute(expression, null).ToString());
+                    Output.Text = lastResult.ToString();
                 }
             }
             catch (Exception ex)
@@ -128,6 +164,7 @@ namespace calc
                 Output.Text = "Error";
             }
         }
+
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             try

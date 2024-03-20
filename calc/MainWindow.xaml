@@ -240,7 +240,7 @@
             Grid.Column="3"
             Margin="2.5"
             Content="÷"
-            Click="Button_Click"
+            Click="ButtonOper_Click"
             Style="{StaticResource RoundButtonStyle}" />
         <!--  7  -->
         <Button
@@ -276,7 +276,7 @@
             Grid.Column="3"
             Margin="2.5"
             Content="x"
-            Click="Button_Click"
+            Click="ButtonOper_Click"
             Style="{StaticResource RoundButtonStyle}"/>
         <!--  4  -->
         <Button
@@ -312,7 +312,7 @@
             Grid.Column="3"
             Margin="2.5"
             Content="-"
-            Click="Button_Click"
+            Click="ButtonOper_Click"
             Style="{StaticResource RoundButtonStyle}" />
         <!--  1  -->
         <Button
@@ -348,7 +348,7 @@
             Grid.Column="3"
             Margin="2.5"
             Content="+"
-            Click="Button_Click"
+            Click="ButtonOper_Click"
             Style="{StaticResource RoundButtonStyle}" />
         <!--  0  -->
         <Button
@@ -367,7 +367,7 @@
             Grid.Column="2"
             Margin="2.5"
             Content=","
-            Click="Button_Click"
+            Click="ButtonOper_Click"
             Style="{StaticResource RoundButtonStyle}" />
         <!--  =  -->
         <Button
